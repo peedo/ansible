@@ -1,0 +1,212 @@
+---
+# vars file for sftp
+
+# ---
+# Variables for rssh.conf
+# Tells the shell to allow sftp|rsync
+rssh_allowcvs: False
+rssh_allowrdist: False
+rssh_allowrsync: True
+rssh_allowscp: False
+rssh_allowsftp: True
+
+# Tell rssh to use the user facility (log user-level messages) for logging to syslog
+rssh_logfacility: LOG_USER
+
+# Sets the umask 2 for file creations in the scp/sftp session.
+rssh_umask: '022'
+
+# Extra variables for chroot if needed
+#rssh_chrootpath: /usr/local/chroot
+#sftp_users:
+#  <user>:
+#    umask: '022'
+#    access_bits: '00001'
+#    path: /usr/local/chroot
+# ---
+
+# Variables for /etc/shadow
+# default_passwords:
+# - pww: "{{ vault_userpassword_for_pww }}"
+
+
+# Variable for /etc/group
+#original_groups:
+group_accounts:
+  - rsshusers
+  - sftponly
+  - sftp
+  - markkupesonen
+  - sanmina
+  - hi3g
+  - hi3g_test
+  - lc-oulu
+  - mf900
+  - cu
+  - pww
+  - eq-user
+  - santtu
+  - telogic
+  - jari
+  - RETIRED#simo
+  - jyrki
+  - RETIRED#toni
+
+# Variables for /etc/passwd|shadow
+#original_users:
+user_accounts:
+  #GOTCHA.1 - GROUPS(secondaygroups): Before Ansible 2.3, the only input format allowed was a 'comma delimited string', but with 2.3 YAML lists also allowed.
+  #GOTCHA.2 - where >1 pubublic keys for authorized_keys file requires inner and outer loop using subelements.
+  - username: markkupesonen
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBlThKlf+OUNt49pyDSL+T0M3ptkTJkQzh+UJsubx/G0E5ydb+iCNHqUCYs5P5IS8CMRA6lpJyMdu+atDxH3C5DLRX3Vrpv2BQFyXY3PoHOlyYlkQ5ohJPONl4AtQmg0v10g5aQNjjTvhAlzeaIpsOdfY09C1fNC4Ivk2Gbp6HbCrDEs9Ugwpdgt4Gcu/Av3deGx1rUBkrOAWqCuMaw+T4fS5VsHoRgP4VFiLP7ycHdowzMUCLFA4KYTI3HQt0YCLbwQGDMb//BU6i6m74Iw9coQEr3WpZ76XXaKY/OWTy6Be+Hj3HUYn0yds+yqBUcSJeDb6rTJ0Z6ucWCUOUsKqX markku@Markkus-MacBook-Pro.local
+    usershell: /bin/bash
+    primarygroup: ec2-user
+    secondarygroups:
+  - username: sanmina
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAnpkl2hLH94Bpn6hCN5OLSgQoS3QGlhsu0vhXviuruhGGD42XGQGn9UhYc+Vbekj/0JvIHKVQYmdPw1qJu0vPjCXv0XGsgQW3Yq65qnrhOlEnQfbVVco3SwrQiojslWqZ8CSSzaN/vbV1vwyQYY4nQNPz9k8Dtw6csSzfiVn+C91MIiDkLB9zPcT7uqFkAFq5163y8jc6L6QesIdkn22OH7Z29gx5Hl5Xaprzi+//UBIHdF+x/N7sbn+ds/vwoG+0YflszvU3tXWyhFKuG6sRhfj4p7cS29t4Bw9mUbAm69LPg5xbfXVfToVPXxYGo8KAGR+WE4EA5U0BCFuoNg+ihw== root@intraweb.p3456
+    usershell: /usr/bin/rssh
+    primarygroup: sanmina
+    secondarygroups: rsshusers
+  - username: gide
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAmeIGab/diyMcQefKqJRx5x16s2UMZ+HNyG+PvnWw6G4NMA3UayUBH+alLNNdE2kReulIVVDq8hIGq+v8BJlRGPQ2bLWtCDHVkeNKmgULwnOVAKWfznmtl57QqefXaWqcwsuopbe7gqAZxcc2SHI1y7RUUPytTbV4xr4EymIGgxjHn2lo5SK7K/KHWYJjQiJU4KqGNj7H1wfDHruJ4n6NMrJIbm/2cZjwDX/qRynfvJ8+z4VrlVp4AU3q3EyyhX5ozEMPc0p1lc6qNdlfArxcUHZ0seNTPf3huK3joix6OuJ1TGcLVrXi4OIzHM7kLRCMkWH2YFkjUHIrZpZhNMCR2w== GD_Transfer6
+    usershell: /usr/bin/rssh
+    primarygroup: sftp
+    secondarygroups: sftponly,rsshusers
+  - username: ibasis
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDlzkLeF8QvS4rtxqzH/821mU8gLHIKXqbsHnDzpWQsRYq1FMEhyIMGNSuNeP7Dyl4s9Reofxtfjte9oEKILRoPR+PX+qve1th5jGQJAcvlYPtetjDEkL83mWtDI+yZ2/pc0Q2sZaTlI6jKdAsF0a5rf0GpyIbAwy4t5QoQir5hbo3Osr213z4qEb76FTEipRFtce6HZc5Nf0IeyNcl3Z/acFuvaeetPy+EDKpL7hPhpFYcMH4OYs2mP6HEUI9lLL+T5spTuhGQYCjzbSQvl4IOEs0+39LrTm8HkXhqRA+w20pmPvPwGqUGJxL/SRtaKOI+/QSCDmToDgRD7tiwuDnpD3ZfhYu4o+2HgmzqljHwnvpLDLvfy8Eo/bH2Kd6HqAgow0iHIbJdEBK+5F8SZcZ2mbKsOELaRerQSSreM41FAqGEkT/qt39kJg2wugl7Km1L0AWMQphV5iisIFzbktrugeJLdpX2q74hjNPcrdEGDEreDPiB7PvT9qm26eC4A30oFr/EGlYVDFmZ/k93mwTBjquQr31LSie4pSEPMpmY/MQ5GJo5p6pNhVfAO9Ioy1W1clwNeZUlLTyHGq+JXVWGtflJhJboZ83KeK5/+zXpAC9GjN0l+/3JzNyIlNqTpeJuswzJxmakQIPM2Vy9hwB2ozFjaqgqSWDxnRbwpcGEQw== uros@esim.ibasis.net
+    usershell: /usr/bin/rssh
+    primarygroup: sftp
+    secondarygroups: sftponly,rsshusers
+  - username: RETIRED#zeik
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5GTxXfm8sL43T1yInW6HwRwMzRxloQ1EuqBw/TUY8Ch5JWpDURuUfph6bt1qceWr5QFw2hN/b06BLpZ6GbXK96BOcU35my1i3/TJYrU53el831rderkJTWW/1jMCVVxvqP7W3NzodEm+cGp5C6tkSfI6+qk53/cGIn49J+ZuLxXfODTOJdMybyKuJxNhxbYiSxIFZ7Uydr22ebseH4tVekAjxS/9cs1nusRpF5Nq60jmhqqEU2/BtYK8jrZ4qRiaV0e4r/IAjMO9/L+K0kuxGUXuozIG8H+Xvij+pwFu4Hv+jlitDhZwaCCwj5dh47fUAywEs368xEdko8fl83Zd7 Jari@Mac-Zeik
+    usershell: /bin/bash
+    primarygroup: ec2-user
+    secondarygroups:
+  - username: hi3g
+    userpassword:
+    publickey:
+        - value: ssh-dss AAAAB3NzaC1kc3MAAACBAOS8T9S/UCgh8q323B46BYmH8LTo/DOBnM9Fc81jIcr4ivLtU3FcLlP7R/WuILyjQI9IkpeBkRw1sygQMO9nR2BG3DpbXZFzLpCiSq23JDTO2vsQqOfxtd3254502FpFxn5tuln9JBOm+BcvUg31QE+MSWwgONIQTSAYyYX9EaaTAAAAFQCCwruFlJ1uabm2Vz3bcC/oxWel7wAAAIAj+jb1ixoye5lVQBYegvjTZVGxGW65TBzg3ro0Q5BQvGnlJYSRnFH6P0134HpTEN7E032GEHYrQFAsrMggK//wG3DP0DNPY7dvCpPfl1Tbd5B/bLJzyDw0BbkAT7rnBD6KKeQGLpxsyj2l+A1cvTqbWxARjBwTjkWXbthneOOEIQAAAIEAikWuCix8U/Wn2kcoY89mbjAINodiIBW0t3pceO+Pu9rYYMusBbvnv57+ewhS1B9/c5nLvAYCuUt0O2yYoi9PzpHDu4xIrMQ8ayOAwsLRn2A5FGXlBi/DtDhWoANKtKK2RRA4DtWPX8yAlfgs+QbOLtPGXel+scDXvjr9BCKXDYY= filerout@u1205pbz
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAABEQAAAQEA5DZsOEQDhOpiQ9210nliIwTahHtneY3zzdx/l4Opd1UsYwv8ZUSZzZ8IZPKMcGeIne5pnP0X6ZpTfWymOh07c9u7xAqA96x7P6C1QW3q/uKaRBo0YJTq2lFXJcTBOWtkLySrtt/OaX7P99Ot4zYyqDjGM5QCFIsO7Q5LRsNcKDOk9Z87gYdVsUlv5TxuHtIH1Er5wF3fyJGhozpneQwxpbUbwK39r0ZGGXw61GhROLYUd2Zy0KRJyrtdl3h02S/TQBYGI93afMY722OkKnmELex0ZPQf8dbgdbdr6mEwzov4neldrDMvD42cTua09ksdTiA4fsPLTHoTaapuy8SnAw==
+    usershell: /usr/bin/rssh
+    primarygroup: hi3g
+    secondarygroups: rsshusers
+  - username: hi3g_test
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAABEQAAAQEAvQBy59m/RTvXf+T11yi2Gafwldr/knid4JWtgAeKoqRdzExpN1d6KKTyZw/jDF9mHjgAqD32pC3Waj1eSK0C3xzRHPqU3kfDjLCOHlePkDqVZrMRqLMqaxcdDWvPfyyuXUDHbd5ZIBVpuvRMuEf/8ojiAz9wMRQ/SsD5EwKIDBWkkotLL2K/SQzsGC1ua0TbLHT3gN4UIY3klMdT6QGE6KHa20KEP9swuD8hO2w6hM4KPFHCrPuwCcWidjzx8A1vKR5MepOaWuIhtXwIvs9MUiPI5pPKTXbcdpRLwGxprHGSMS+vz4/9wEUUv5qiT2uUpZzUVIkT4q3F/cu7uVrBjQ==
+    usershell: /usr/bin/rssh
+    primarygroup: hi3g_test
+    secondarygroups: rsshusers
+  - username: RETIRED#toni
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKEEBTb9P6gsuiKTrzJ6RH2e9zjkDQJ9i8JDoi8CW9LF/pO46nnwguNNDsSrzQoBOrmyUrHvaluBOBz46EykOhktTSgWd5CTv3mmgSKWh7mrc7fxhiPvIF6R5UrL8lx1MkUodXRiPQmJAhHLdH5L1+3hHh8U06AiQxopJ6FFh00ew5beC15/phxuW/aGfajw1Ga3SKFYVLzhE9RMfcFJj+f0H4KjpJknkyXWAkjzWFVv9a0XLt+BxLzoHwLEsdG4OgXuSAq95kZYwBdjjujtu3RUlm3qWyhv7rcdutVA9ZygT/5CoPb/HIppAMI+NHpJ9GZqoLgH9SgT1ewimLvcEL toni@mesmere.uros.lan
+    usershell: /bin/bash
+    primarygroup: toni
+    secondarygroups: sftp
+  - username: jyrki
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDJBAyywDPNNzDYTeBGG/UYyCOjIhOvbWN1deQAt05jV7u0B256koEnYNd2K8XGvdICm/7hsaFZYRus63ZiZs5iV5LuIoaDbcfMzAZz5qyFLn/T5rum6rfeqyY5mtLJ471P8SKZG/XmuU5M/p7XVC30XrrDaW/gN3YDf/3O5rJEnibOkQsf33GQqyJac6s+SmMRVK0VfYwuYa2BHI14unBelBXeUpWfBBIKYeT5rFspu3lzswJDw1slqvFABK/8ZiiWuFsmEfn/dq6nJWC2qTFhuXKE9/tendAASfxvTCDezWtlsv9bDAgBRj8Ao9G9FQk4OR+svBe85sTa7zkWN9mx jyrki@Jyrkis-MacBook-Pro.local
+    usershell: /bin/bash
+    primarygroup: jyrki
+    secondarygroups: sftp
+  - username: RETIRED#simo
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCfCzHmnFledZWf1ZeNKn5CUAzSXhqANTmrxJQiwgkfDG1tM1kmVuMZ/ye5GLDw/FgYEC9lkCa0qfONM1ZV4aA00VRjFCzlAOftKQ+LhcNdGOhco206JaBi8kNf5f9oVO46+v1SsZ7/n9hi/bdDwM10CYAg+Z9Z9TK2zirLHUL1ZyRzpyC9vjaqQmVy8FIoOJfh/Wkkc1RoB8t1MMrtHx02yWDU2GHwczic62aJLS+8Ee/wc2Pzy+5+gofixbVxodFSm/zxykmWqePTGqSxIfxzT6OIiR1eXO4tH2HvJfL4L+Xa0tcCRPh76Yjgso4OUfU08/fF5bBxRqhMy8vgobFn simo-uros-rd
+    usershell: /bin/bash
+    primarygroup: simo
+    secondarygroups: sftp
+  - username: jari
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkoZwPqKNIXXdE7x58M5MMsAaYGsrXS3H57LBr4kSVtSDlssWbAXsBHTr7aBVr62j+jkXLx87NAwk0KeZ25kth5fTVpc5GgtBGIV7bTDlRFZuAogKpP3gyFiJRN4I7SarXsy8OfW8Or5LlacSe9g3OdkVFuiVeK87w+DYlZxElo0yHKCkDeEDf0REtdvC6UmfpAL4tehTmNl+VsJMdNhwp4LV537o4ppjnlwjAmsdhp9HlqZykHFkI9BqW8/s2/0OaJoja/HdABuX4xe6hfx5iGuS1/1+LOIvqZcFzyO8cwC8sCCIuaI5iJ8ewKi8BbgjrjEcVNtdKL8z9yvG9BeRt jarikork@Jaris-MacBook-Pro-2.local
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAta0KndBes4sU+0AxgDt56PS9xZY6qY/raEqd/1TEaiv/LpVmTaYDQ15i+1as8OMc4HX8FiGQoiKwLqXaF3eU/58/9INv50smQTTJ2fqO0r7aVfFpOyK1u0qsyEJvhd9BOtq3gHz25a8y8XviBa2m1TYNcBpjXJyP+olpQquQsh/zFDfed6dbux22mgqIXJV72+Hb7zR9TqGbC68vIrnGR+RjGidFrnjK6I4wq5Uo3Mvjg58EjBevj5DPxDODYwPMiW/wr046GwZNo+XqGaOaA1WpsA89OwTJH/5wbAIXhw0+vwRgtsAdoi1bIXbaQvWfkiJF7ycPrkT60GnEk+XD0w==
+    usershell: /bin/bash
+    primarygroup: jari
+    secondarygroups: sftp,rsshusers
+  - username: datainfo
+    userpassword:
+    publickey:
+      - value: ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQB0g66hrJ0DV4KfTDnoAtJkbF/cpTCgRf8AwvW1Vkf795hht+3+3resxgErpAE+5OwpFIUlcQLGIhvjqxWdhV2uIlwgjRWQe4QsydsBV812hcYSnars7/DRywdGUCPsbXjHWuaSFj1YUWB2FEzwd8i7fRayYJ7R6F1bMdtzx8sBCvv296dbh86PCJkxXC7rjMI/fziM+N0XGbiX8Sg8YfpOTRVp65KTofTdjJN37S4BydweqHFAWxl3rwZ4A4bi48gwjaOUwTVhrWC6v7MeXfyPUmH+HRKgW6+N92tQs+MLWOXbQpuyD5Cmh1UDstsldkgEM5BeHsIXZMDYDP74I5nB
+      - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBiyITeDhek934TgPuq+uYQSKNMj7ueznlW5xYiXaYHFNnK8JsAJ870a7YPntLRfN4iBO1qqtJqdD5L2zls+Y7tumQUYQig/X85m5AqypqKp9T+OFlk+2krG3+mYB4WE8c5sphxNgEaD0WCX2elhSUTivZyxaIckpMrEXJZXAID1/5awKv/SwQ4jkaDTB8v7Fc/nzdAxtJ1eIEF9/0vMHUEoCNvy9XCyRMpKpPvGCrX0DX9hAaQg7HnRCeoKYikvcapaEPXtoHNJRR5tribY812ioIQ8ENrlSCLXewHztf8S1LnrtLF+Lx1Jcoe57A0vSiJzL7gzFUDXJqcQ/WPWEt raimojarvenpaa@Raimos-MacBook-Air-6.local
+      - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKEEBTb9P6gsuiKTrzJ6RH2e9zjkDQJ9i8JDoi8CW9LF/pO46nnwguNNDsSrzQoBOrmyUrHvaluBOBz46EykOhktTSgWd5CTv3mmgSKWh7mrc7fxhiPvIF6R5UrL8lx1MkUodXRiPQmJAhHLdH5L1+3hHh8U06AiQxopJ6FFh00ew5beC15/phxuW/aGfajw1Ga3SKFYVLzhE9RMfcFJj+f0H4KjpJknkyXWAkjzWFVv9a0XLt+BxLzoHwLEsdG4OgXuSAq95kZYwBdjjujtu3RUlm3qWyhv7rcdutVA9ZygT/5CoPb/HIppAMI+NHpJ9GZqoLgH9SgT1ewimLvcEL toni@mesmere.uros.lan
+    usershell: /usr/bin/rssh
+    primarygroup: sftp
+    secondarygroups: rsshusers
+  - username: fujitsu
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAABEQAAAQEA2AjlNGN1DZZHgZQ+wwj+YVkrcLEuoDPWPSQdnSe38yaMF+PNGiym8WKPFvTahFqwOGuhY0NmFCAnPNL8WypQ+DVyTxLEbe+Bq0IBZEBzIbvL4mggLEXNSXtrsQRc6V+1cbg8FYWWOrO3U9mxGNzYYApiinj6/0uNNC/iOFv5+tx1V1EPtQADjYO/4cfycoHschZ3uTfudVjHlnzjVY6DqhcK6o1NTw9CgcKpSuQ+LgcXgt8V7GagumDjkyUS0GNQN5RpY9EfX11bwVcTN/REVKsNkKZOgNkDoky6FTqtosSl9lLYWwTfCzL9VFXkG0xluDt6jgC+i5AWjSs4iKTnDw== Generated by Administrator@RAIMODB6.
+    usershell: /usr/bin/rssh
+    primarygroup: sftp
+    secondarygroups: rsshusers
+  - username: telogic
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHlwOX8NqRpgLTXlS8Jm9GlzY9rSG5ATvOKG13gdcmGBcgmrESNsoEvuKYGzYMldZ7dY4Wodp8K826yUit+5IeH2xHTeLWb+UHp09hGPXUyVVoO5tvMkMtBMM1VU8BmBUmxhm7G/zR49waZ9eTCN3ZRJ4MElz1Y7oJUN67ccg3Sk4mfV6E+fKk/OSCKbBPI5Pf8LwT087GPKF4330Vo/simXcD+Mvjv5+fEOQJahxqyfjYosYlZtyIB8l2YMtM97vmfti29FyKsQ71mwd/ywXKLYsFrtUsysg51YG3++1Zq/+0hWk0/JMH9/vmQ+zSDeSCJXhfe4UqvYGWn4pEeVnl toni@mesmere.uros.lan
+    usershell: /bin/bash
+    primarygroup: sftp
+    secondarygroups: telogic
+  - username: santtu
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDigor1UNn2Bsn0n3wENjHEw6vqJurGTiPSMiphFkdtHhK99csU8z+MAACZiQWRrI5aRUcJY/a8vqItcOl42S7G/17X+AaEBwKgdGZZg4ZxwhDTmTtrKnyA0fun7MdSqGiYzsLcxAsTmkLhvHKwrYYckCCpvM68j+tg2VeZ8YIR1mxa50yAvJkvqMM3LQDfimWDPzKPsSqodnmF0sBQXKewi9ONeLPx0oSgeNJljeZDtXsSknrCV0rRvq4aDWfG623A4KyLSHlO2neASYLa2w2lWMS2++nAsSrUoVk5hxO+PvtJ4G86HKipQ2EWydV7XoiVYEzf7apED5Ns2RiLU0p1 harvio@Admins-MacBook-Pro.local
+    usershell: /bin/bash
+    primarygroup: santtu
+    secondarygroups: sftp
+  - username: eq-user
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD2R8GY+cpmRwtQBq7PzbgWGJN+cG1sq6aQkZFHc8kOWSWrwmTX5XFa6IeGhg2JuTU8jy+c/tvCDbxF3SSfbRUuyiOvObq47f0dOJcy/oSWShopCKeqxNgmjEgqIDDLALSvPXpzcUJ4VLA2BGvkIsX0c9/edBH2w7KqqVTCY0ksjtOt02YW3DRPxyo6ixvm0ITTJ3su0JIZaAPqGMXS5XBU5MqJdKbqf9DA3memwEsZlnmu/p8LYJFWnoidbWlMMmTvBpb+gtYYY63PODWv7oKWPdldgO0j1QRSWNJGHrwXsLlBLvVNT7suNbtnjDj4vy7PS8SejxeTiyWaIizJ10at ca@ganymede0
+    usershell: /bin/bash
+    primarygroup: eq-user
+    secondarygroups: sanmina,sftp,lc-oulu
+  - username: cu
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBLGqbxHBUre6LKkdLaUOd0rVr1Bc+l8+z66aZ02QV6nUYyB9+Zfl3DWrlBQX+T+Kc+poei6a7R/YMps5IEIHHFKUtv8rHbetAAL2c56CsTo4o7ePjwB6JKCPtVz6ZYGRMD0E2gEG+u/xUHX3Z4kyvO6gOCrSIDPOmJ8aybEGFqJQ==
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBbFtCKxede3IBxc5CTt5DopDHSSaiBB9QdMzvSsHL4UJv8vw567Mv8xRr8STbeHdOQwHtW/uVtTYN9d3muBjKsPyfbmIb2ueriX5h2ziFQ1Uznv/zOxBqIQmC5cwmeUKwu9QNZXucj0qvtYCYveXfXlyCI2d8LzD0SAN42AdCzPw==
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAiZLqNxqafMz/q6bBPrPX0fNtQ9dSOpvqV8UW3CQVoPDCZQ0/DicpANJlnWqh5+38RxMDe9yW9eBDGrfFUPnm0QJOV/impfMN4L8Dsgan8+ZslmgoFakfQ02erWwB5nHod6QUMtDQcX2wIeVZ/q2Oze495nivTKGwvkL7olUaFt/6gUYsKx5UdUkXt2WAYlu0vb7JkQTGeIq0xfkKUBng2UJzDFh098O2S3TgkHynDCdtpldjjiWLhzV6y2jGDUnM/HwfXNgRL0p6qaebjMagOjEOgmKqNKmW7Ba+g9+kzSesdn2cRHj/SEGHgsNoZfQ1nhLQuJHGAex91Y5NIAVVyw==
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqP7OJPr0ljLygWKjxTKZ92haCfU9cAStt316mJqRpuuNjhwHHqyGKB/TFzCl+6yeJvzjJkfvXadKJKBSNyhCMrY/VYs4BCZtmXEXIenJ6xfyvyiCppMGeYO4lrXrKX4BEb0Tmoui93+RYv5aQnCSfkgRpPNgDYtSEKWwywmig7Yp9srjUynrNa69diW/Z1CAd4gv+D0Fqi9aV5AsifBO9Wg2DKtq/sgcWd8DguUkAPBORnan2HNQf/Iws1nT77wGuVewcVs+bApg6+RH8KoVsvnpvfX3DwG3thl97TAPXYhvbaPBHkc4QPB9H2OWIlCAVzMDOTYzyVXKNe0+KvX9B taohaukka@taos-MacBook-Air-2.local
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7DLs1nBTmFvpoMxj5Huw7j7STRjgH6gg5G1NJdJvG3l9KhT+yjydRtz2mBhgFl43KQjqhZ0EB/zQT98BuRipkWf18t75II39pO/8mA3M9rwK1zoEAIwAst7Tuz2Z8qQoMx/o65vGdLdMhd/sP5zZZWEutoLh+azPV62uXNuJP6uG973xmTFuc0xX/cHVbSXEp2WzmV9u7Y5KDUP9sY5i1uH9rwFgLob47/EO9luJcpFaI7oVw1ROBu/ThM/86VEWtyb+e1wHTaLKSA8o7qKa332xVISAlWJDv42/x+74rLV1g4ZUjLnTqMyzZdMrVWUBTC6q69BuqFpQWS5UpL3cn report-user
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAszZdak9E0NFQJeYlnVEDM5YRMvKuUcQWwI6CZFRzQ098jq6K6WQqUHN+M31htwXcjBLUuBLlHUjwMoESLMmTJ78akNyo141vhbZxDkci3GzDfxzkSXCsgtZUBzTMu47UZzx/mSFmHR0BM9c7R9cqyLXVKM39YX4j4bTR2UHL4XQVaGzB6FUar7MHQo6Oa9t6i/9mGGx5o4fwL+HshxbrbJDEv0QA3yRgVtwiDk+jxyuIyWCZGJGATj7CqAlOWG/Wes5Kfgj2BBVntNuaI5WTQCWDDR3PbmzJQAOX5p6j/ir03MpDSeJjoPKZK06D/xSk19bKnjvfHkomhmT9PeTLVQ==
+    usershell: /usr/bin/rssh
+    primarygroup: sftp
+    secondarygroups: rsshusers
+  - username: mf900
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5GTxXfm8sL43T1yInW6HwRwMzRxloQ1EuqBw/TUY8Ch5JWpDURuUfph6bt1qceWr5QFw2hN/b06BLpZ6GbXK96BOcU35my1i3/TJYrU53el831rderkJTWW/1jMCVVxvqP7W3NzodEm+cGp5C6tkSfI6+qk53/cGIn49J+ZuLxXfODTOJdMybyKuJxNhxbYiSxIFZ7Uydr22ebseH4tVekAjxS/9cs1nusRpF5Nq60jmhqqEU2/BtYK8jrZ4qRiaV0e4r/IAjMO9/L+K0kuxGUXuozIG8H+Xvij+pwFu4Hv+jlitDhZwaCCwj5dh47fUAywEs368xEdko8fl83Zd7 Jari@Mac-Zeik
+        - value: ssh-dss AAAAB3NzaC1kc3MAAAEBAK5rixsVuOhNhQOeNDZu1BYkjhaABt3WpPxDFsAQc6rbbfBp2Uw2/vEaTN0fR85s26nsrBHQt5K39KRu6wJYcRiKqVDthbk+ZvJv5rj3LuNNID36HBTfKiK/fJHbgjC8VGw4TFF3D/x/hfrdswgEu2/bnRbSmrfQJS4j5Zm9MaibYYGqkrUELpumt8vxsdqtsen+s+VNw8uxxR6FPsAnXheOb5ZdKqZiEsImx0P8upAj1fhDttiYy07IuiRLMcHEktP8pjt7p1fq68gEeH2U8tgpxVbKA5yZjzKmOFdovq5S1KogxDUYycVi+ruhJh/g21VovN2r+e5MGCKSRQR6e6sAAAAVAMyc+2LxzGD6hLfNgVCUkOtYvlOXAAABAQCWAGMl+CRYEeqU3ahCn4OABVz1VsHO4KiPmuaIGVIkGBkbP596gSzB9ZSMrh1xhIZckbHMlCkPnzPzz3KJaXj83l4RJfarrEgg7lAReRceMURaM93jv98P9E2RCxMWPymuzxe2I65127XZVEqja8Y4FOMqN+PqkjuJxQS1ppM8k9vc0KGOzZNvSstnX0ZXcDhYRcjcTOLe8jJfm11ubX88jvYH9vJdRLDf1h/CClWyNdK2hR/uNfZifclxFOFCSBGAy34cpiFr8FTs4Qu3CpbnKkytqyH2TFU86sip2BDQhe/mH6iOZfiOn3+Qi/XauqHo0Hqt71bRI/V6kv5rwNuEAAABAE2CypXTdND4k3kEKp+mjOizgjLz3YA0GexJddbQVHq1Ye05CQ7ghgEIsU3PjgzHVShUIwWXe5u6M/BY/gN3vidG5NdfGXkFNsmGIUVOyBDnKppAj5u+Gd8/6eQ8/8GvUgDmeleR23ohz26JZbqIK2fmsf6wjmfl8TBJYSSl4ILHtAwrEzMv2XjgLxr30wqOJO81bxTqty8W5488GU4Tl95Q1mTXA9+4cWvdrUL3wCmlUAS+8wEHzOvnhfAJNWx//YH28dUN6vCznNZq0ryt0k9QOOp5Q2AY+IOGr8HFD8Ocpw3uPx/+YI8O6Y/AZQG/+GuE6mcqXCLgm6LnlqV2RBc=
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCY4UMnBg/K9O8BFE53H7ZwqJXfWxJdAK8Wgu/Niu/4Ow33CbzqklbAW8v8+opHYm1MzTUnYdRlOLzGDIL2kR96eZaoJ35QUW6TXeUf96n9NNZW6zsj9bzG6p2aiEaclTSvYNofEA7O+pGI/r+esmR6U1a3On7b8IPkbNBY6KVpvjbW5S79gMGwDrzEGrDOk2WDV0zU2ikc52/1hNIEgo3ZmucewEu/HPb2w5TV7Htd7Mal/tiD6z7EIA4hxMtZ4gXf2sHqlQc/6MRzki7i8pZm2D7v9YLIqfhYjuQ96tKdo0EmzkdGMfCle8DxoQFxVz3KhZQh3BS5C1AUqfPbXIxp msakkine@msakkine-ThinkPad-T430
+    usershell: /usr/bin/rssh
+    primarygroup: mf900
+    secondarygroups: sftp,rsshusers
+  - username: lc-oulu
+    userpassword:
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9HIVe7aYmWuhriEKhJMQb4fUujEgLfLs2YEtxl1zaYGawYqsTByM7uq3UoHeIut+pNZstP+mhti8gvlyPtz/8v7PlXyBcnP580GqU+OF4suhfbaQFtCH6ImlwAc8dSZ/juM7UX/k6jMH+xOkPC6AB8uK47Vb8/7l1K3qTQhBws3+hH2ZDRbiaHFKS9x4cooMA+JZAVLzKpwIp+mJEmVqTXncDbQQcVQr4a9g6YY+bRXU2zNbQ8QeFoUfbOsnz3cqLifCK++QL7aVak1qIo8eEx/AzA9gtJv0yiMeX+/yvb5PjfX2qn+dWfQvScOgeZON5Ag5AJe2Qr+NRHuxEKTKx lc-oulu
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqYI4ZZk9Q8Lp7Ak2IB+3UbrSrirUjWDruYbI2vNkPb32HoaGG3WOOeSsyrZ3AEKDilC/CRRXf1hqV3TpkTAhp2QVD1GIG85npPAAuLK8X5FDmws8NxYStP7ww9sFEZHdgQ0T/8Jji/kHHr1sNfm6joewaMDWzFs4/VLXitN3HPST8LRJExac99gYXp7m5gIxaa+s0YW+z9+8UaLEu3sPAj0HwAInLXPL7AucxWAXoXebjkVaEsYZ7RZfHyFCkVvvgi30oWAU8uHWqm8gYEobZytsMQYh/svFa8lMtGltRTU4UelK3eHIw8rFkeVDc4H99bnyAttj1FGNJg3+Wmc1h msakkine@msakkine-ThinkPad-T430
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDRazPUHcY/JSnJiaC8Urvjvv3NrXw21hZRIov/xT7c2yVTVN1qz2rE1T0IVuI5Tk8IDLjWdV82MLzZXWGPfIpk22EPP2k0vsxs5+dFRGTuY+aw+tzk4rkEim7JAvRnFJimYfjhx6Ab4EV0+7L1tf9/D6Q8f/FxwW/vdYECZAabdwTI+cFBTPGsvqMHTkNv4opcXahQXtMJfkdFkuY1YqYRmP0gcn+hopZOhc3P9s0q6eWtwgqK1+fecs9UZVTyQUaJMeq6Rjt8L1h7RuVedeN3Z1Yqrdco3vjMuETj0ycgNi5TRbGQmX3e7dqBttfCQOVvxgO57CkdHFmXVKcSL/R/ Ilkka@Ilkka-MacBook-Pro.local
+    usershell: /bin/bash
+    primarygroup: lc-oulu
+    secondarygroups:
+  - username: pww
+    userpassword: "{{ vault_userpassword_for_pww }}"
+    publickey:
+        - value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQFoDU/Bj7TLNf8HFoOe+V69xNR3F+3OBaK5oW22Z48S1IiQ2nAxTJLUZjavInWa8QPqo5uKg/+qx+qXlqgG07Kte/c+a+fuGx5z6W2XGPhR76Rpw+mCz8BNmPTbliXLFjLCRWHHdW7j5x2o9yqy3lAjwWTGWNff3IQhjt3dizsqx9/f3dkux4h6MpbN2Volfd9UgU4ix5g+PuXa/ZpFxxeXRtjHmUPOy+hwQ3L+et00nA/vhhQXKe4Lc2ksRyXPZyBMHsiNXBTw+D4zHX6gLwFe9CPG0L5Mp9Sx05gRKHu6ZMfQY/7rxETpvJurcQ45xxqPx+AGSYJHAAZVyzKSsp jarikork@Jaris-MacBook-Pro-3.local
+    usershell: /usr/bin/rssh
+    primarygroup: pww
+    secondarygroups: rsshusers
