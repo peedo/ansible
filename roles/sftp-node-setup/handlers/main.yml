@@ -1,0 +1,13 @@
+---
+# handlers file for sftp
+
+- name: start ssh
+  service:
+    name: sshd
+    enabled: yes
+    state: started
+
+- name: reload ssh
+  service:
+    name: sshd
+    state: reloaded
