@@ -1,0 +1,15 @@
+---
+# Master playbook to manage presence of user accounts and groups on sftp nodes
+
+- hosts: "{{ hostname }}"
+  any_errors_fatal: true
+  remote_user: ec2-user
+
+  vars_files: 
+    - ./secrets/user-passwords.yaml
+
+  vars:
+    pattern: "RETIRED#"
+
+  roles:
+    - manage-users-and-groups
