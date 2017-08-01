@@ -1,0 +1,21 @@
+---
+# Master playbook to manage setup configuration to sftp nodes
+
+#  hosts: tag_environment_staging:&tag_Name_SFTPNode
+- hosts: sftpnodes
+  remote_user: ec2-user
+  #become: true
+
+  vars:
+    shadow: /etc/shadow
+    passwd: /etc/passwd
+    sshd_config: /etc/ssh/sshd_config
+    shells: /etc/shells
+
+  vars_files:
+    - ./secrets/user-passwords.yaml
+    - ./roles/setup-sftp/vars/main.yaml
+ 
+  roles:
+    - setup-sftp
+    - hardening
