@@ -1,0 +1,271 @@
+---
+# Add|Remove user accounts and groups
+
+# ----------------  #
+# Manage users #
+# ----------------  #
+# Show users
+- block:
+    - name: retrieve list of user accounts
+      command: "awk  -F':' '$3>500 {print $1}' /etc/passwd"
+      register: usersshow
+    - name: show list of users
+      debug:
+        msg: "users: {{ usersshow.stdout_lines }}"
+  become: true
+  tags:
+    - user-show
+
+# Add user (1*auth factor; key only)
+- name: add user account  ~{{ uname }} (1factor [+key][-pwd])
+  tags:
+      - user-add-1factor
+  become: true
+  user:
+    user: "{{ uname }}"
+    comment: "{{ comment }}"
+    shell: "{{ shell }}"
+    group: "{{ pgroup }}"
+    groups: "{{ sgroups }}"
+    generate_ssh_key: true
+    ssh_key_type: rsa
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/{{ uname }}
+    ssh_key_comment: "@{{ uname }}-{{ ansible_date_time.date }}"
+    state: present
+    append: yes
+  when:
+    password is not defined
+  register: useradd_key
+
+# Add user (1*auth factor: pwd only)
+- name: add user account ~{{ uname }} (1factor [-key][+pwd])
+  tags:
+      - user-add-1factor
+  become: true
+  user:
+    user: "{{ uname }}"
+    comment: "{{ comment }}"
+    shell: "{{ shell }}"
+    group: "{{ pgroup }}"
+    groups: "{{ sgroups }}"
+    generate_ssh_key: false
+    ssh_key_type: rsa
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/{{ uname }}
+    ssh_key_comment: "@{{ uname }}-{{ ansible_date_time.date }}"
+    password: "{{ password|password_hash('sha512') }}"
+    state: present
+    append: yes
+  when:
+    password is defined
+  register: useradd_pwd
+
+# Add user (2*auth factor: key & pwd)
+- name: add user account ~{{ uname }} (2factor [+key][+pwd])
+  tags:
+      - user-add-2factor
+  become: true
+  user:
+    user: "{{ uname }}"
+    comment: "{{ comment }}"
+    shell: "{{ shell }}"
+    group: "{{ pgroup }}"
+    groups: "{{ sgroups }}"
+    generate_ssh_key: true
+    ssh_key_type: rsa
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/{{ uname }}
+    ssh_key_comment: "@{{ uname }}-{{ ansible_date_time.date }}"
+    password: "{{ password|password_hash('sha512') }}"
+    state: present
+    append: yes
+  when:
+    password is defined
+  register: useradd_key_pwd
+
+# Uncomment to view debug msg
+# - name: add user account ~{{ uname }} debug
+#   tags:
+#       - user-add-1factor
+#       - user-add-2factor
+#   debug:
+#     msg:
+#       - "{{ useradd_key }}"
+#       - "{{ useradd_pwd }}"
+#       - "{{ useradd_key_pwd }}"
+
+# Add users' provisioned public key in authorized_keys (1*auth factor; key only)
+- name: add user ~{{ uname }}/.ssh/authorized_keys
+  tags:
+      - auth-keys
+      - user-add-1factor
+  become: true
+  authorized_key:
+    user: "{{ uname }}"
+    key: "{{ useradd_key.ssh_public_key }}"
+    state: present
+    exclusive: true
+  when: password is not defined
+
+# Add users' provisioned public key in authorized_keys (2*auth factor: key & pwd)
+- name: add user ~{{ uname }}/.ssh/authorized_keys
+  tags:
+      - auth-keys
+      - user-add-2factor
+  become: true
+  authorized_key:
+    user: "{{ uname }}"
+    key: "{{ useradd_key_pwd.ssh_public_key }}"
+    state: present
+    exclusive: true
+  when: password is defined
+
+# Remove user
+- name: remove user account ~{{ uname }}
+  tags:
+      - user-remove
+  become: true
+  user:
+    user: "{{ item }}"
+    remove: yes
+    state: absent
+  with_items:
+    - "{{ uname.split(',') }}"
+  register: userremove
+
+# Uncomment to view debug msg
+# - name: "remove user account  ~{{ uname }} debug"
+#   tags:
+#       - user-remove
+#   debug:
+#     msg: "{{ userremove }}"
+
+# ------------------  #
+# Manage groups #
+# ------------------  #
+# Show groups
+- block:
+  - name: retrieve list of groups
+    command: "cut -d: -f1 /etc/group"
+    register: groupshow
+  - name: show list of groups
+    tags:
+      - group-list
+    debug:
+      msg: "groups: {{ groupshow.stdout_lines }}"
+  become: true
+  tags:
+      - group-show
+
+# Add group
+- name: add group ~{{ gname }}
+  tags:
+      - group-add
+  become: true
+  group:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ gname.split(',') }}"
+  register: groupadd
+
+# Uncomment to view debug msg
+# - name: add group ~{{ gname }}debug
+#   tags: group-add
+#   debug:
+#     msg: "{{ groupadd }}"
+
+# Remove group
+- name: remove group ~{{ gname }}
+  tags:
+      - group-remove
+  become: true
+  group:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ gname.split(',') }}"
+  register: groupremove
+
+# Uncomment to view debug msg
+# - name: remove group ~{{ gname }} debug
+#   tags:
+#       - group-remove
+#   debug:
+#     msg: "{{ groupremove }}"
+
+# Manage Users|Groups by File List
+# From {{src}} vars lists
+- name: include {{src}} vars lists
+  tags:
+   - user-add-by-list
+   - group-add-by-list
+   - user-remove-by-list
+   - group-remove-by-list
+  include_vars: "{{ src }}"
+  when: src is defined
+
+# Add groups by list
+- name: add group accounts by a list
+  become: true
+  tags:
+    - group-add-by-list
+  group:
+    state: present
+    name: "{{ item }}"
+  with_items: "{{ group_accounts }}"
+  when: not item | search(pattern)
+
+# Remove groups by list
+- name: remove group accounts by a list
+  become: true
+  tags:
+    - group-remove-by-list
+  group:
+    state: absent
+    name: "{{ item.split(pattern)[1] }}"
+  with_items: "{{ group_accounts }}"
+  when: 'item | search(pattern)'
+
+# Add users by list
+- name: add user accounts by a  list
+  become: true
+  tags:
+      - user-add-by-list
+  user:
+    name: "{{ item.username }}"
+    shell: "{{ item.usershell }}"
+    group: "{{ item.primarygroup}}"
+    groups: "{{ item.secondarygroups }}"
+    password: "{{ item.userpassword }}"
+    append: yes
+  with_items: "{{ user_accounts }}"
+  when: not item.username | search(pattern)
+
+# Remove users by list
+- name: remove user accounts by a list
+  become: true
+  tags:
+      - user-remove-by-list
+  user:
+    user: "{{  item.username.split(pattern)[1] }}"
+    remove: yes
+    state: absent
+  with_items: "{{ user_accounts }}"
+  when: 'item.username | search(pattern)'
+
+# Add pre-provisioned auth_keys by list
+- name: add  ~<user>/.ssh/authorized_keys by a list
+  become: true
+  tags:
+      - authkey-add-by-list
+      - user-add-by-list
+  authorized_key:
+    user: "{{ item.0.username }}"
+    key: "{{ item.1.value }}"
+    state: present
+    #exclusive: true
+  with_subelements:
+    - "{{ user_accounts }}"
+    - publickey
